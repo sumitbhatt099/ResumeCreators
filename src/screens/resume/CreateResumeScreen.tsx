@@ -32,6 +32,9 @@ import ExperienceForm from '../../components/ExperienceForm';
 import ProjectForm from '../../components/ProjectForm';
 import CertificationForm from '../../components/CertificationForm';
 
+// Import your color constants from separate file
+import { LightColors, DarkColors } from '../../theme/colors'; // Update path as needed
+
 const CreateResumeScreen = ({ route, navigation }: any) => {
   const { template } = route.params;
 
@@ -84,15 +87,15 @@ const CreateResumeScreen = ({ route, navigation }: any) => {
       {
         text: 'Camera',
         onPress: async () => {
-          const res = await launchCamera({ mediaType: 'photo' });
-          if (res.assets?.length) setImage(res.assets[0].uri);
+         const res = await launchCamera({ mediaType: 'photo' });
+         if (res.assets?.length) setImage(res.assets[0].uri);
         },
       },
       {
         text: 'Gallery',
         onPress: async () => {
-          const res = await launchImageLibrary({ mediaType: 'photo' });
-          if (res.assets?.length) setImage(res.assets[0].uri);
+         const res = await launchImageLibrary({ mediaType: 'photo' });
+         if (res.assets?.length) setImage(res.assets[0].uri);
         },
       },
       { text: 'Cancel', style: 'cancel' },
@@ -213,7 +216,7 @@ const CreateResumeScreen = ({ route, navigation }: any) => {
         ) : (
           <>
             <Icon name="camera-outline" size={30} />
-            <Text>Select Photo</Text>
+            <Text style={styles.imagePlaceholderText}>Select Photo</Text>
           </>
         )}
       </TouchableOpacity>
@@ -224,6 +227,7 @@ const CreateResumeScreen = ({ route, navigation }: any) => {
         <TextInput
           style={styles.inputInner}
           placeholder="Full Name"
+          placeholderTextColor={LightColors.textSecondary}
           value={fullName}
           onChangeText={setFullName}
         />
@@ -235,6 +239,7 @@ const CreateResumeScreen = ({ route, navigation }: any) => {
         <TextInput
           style={styles.inputInner}
           placeholder="Mobile"
+          placeholderTextColor={LightColors.textSecondary}
           keyboardType="number-pad"
           value={mobile}
           onChangeText={setMobile}
@@ -247,6 +252,7 @@ const CreateResumeScreen = ({ route, navigation }: any) => {
         <TextInput
           style={styles.inputInner}
           placeholder="Email"
+          placeholderTextColor={LightColors.textSecondary}
           keyboardType="email-address"
           value={email}
           onChangeText={setEmail}
@@ -260,6 +266,7 @@ const CreateResumeScreen = ({ route, navigation }: any) => {
           <TextInput
             style={styles.inputInner}
             placeholder="Date of Birth"
+            placeholderTextColor={LightColors.textSecondary}
             value={dob}
             editable={false}
           />
@@ -279,9 +286,10 @@ const CreateResumeScreen = ({ route, navigation }: any) => {
       <View style={styles.inputWithIcon}>
         <Icon name="document-text-outline" size={20} style={styles.inputIcon} />
         <TextInput
-          style={[styles.inputInner, { height: 80 }]}
+          style={[styles.inputInner, styles.textArea]}
           multiline
           placeholder="Career Objective"
+          placeholderTextColor={LightColors.textSecondary}
           value={summary}
           onChangeText={setSummary}
         />
@@ -289,16 +297,14 @@ const CreateResumeScreen = ({ route, navigation }: any) => {
 
       {/* Location */}
       <TouchableOpacity style={styles.locBtn} onPress={getLocation}>
-        <Icon name="location-outline" size={18} color="#fff" />
-        <Text style={{ color: '#fff', marginLeft: 6 }}>
+        <Icon name="location-outline" size={18} color={LightColors.card} />
+        <Text style={styles.locBtnText}>
           {locationText ? 'Location Saved' : 'Get Location'}
         </Text>
       </TouchableOpacity>
 
       {locationText ? (
-        <Text style={{ textAlign: 'center', color: '#555' }}>
-          {locationText}
-        </Text>
+        <Text style={styles.locationText}>{locationText}</Text>
       ) : null}
 
       {/* ================= EDUCATION ================= */}
@@ -349,6 +355,7 @@ const CreateResumeScreen = ({ route, navigation }: any) => {
         <TextInput
           style={styles.inputInner}
           placeholder="Technical Skill"
+          placeholderTextColor={LightColors.textSecondary}
           value={technicalSkill}
           onChangeText={setTechnicalSkill}
         />
@@ -461,15 +468,17 @@ const CreateResumeScreen = ({ route, navigation }: any) => {
       <View style={styles.inputWithIcon}>
         <Icon name="document-outline" size={20} style={styles.inputIcon} />
         <TextInput
-          style={[styles.inputInner, { height: 80 }]}
+          style={[styles.inputInner, styles.textArea]}
           multiline
+          placeholder="Declaration text"
+          placeholderTextColor={LightColors.textSecondary}
           value={declaration}
           onChangeText={setDeclaration}
         />
       </View>
 
       <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
-        <Icon name="save-outline" size={20} color="#fff" />
+        <Icon name="save-outline" size={20} color={LightColors.card} />
         <Text style={styles.saveText}> Save Resume</Text>
       </TouchableOpacity>
 
@@ -481,54 +490,96 @@ export default CreateResumeScreen;
 
 /* ================= STYLES ================= */
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
-  heading: { fontSize: 22, fontWeight: 'bold', marginVertical: 12 },
+  container: { 
+    flex: 1, 
+    padding: 16,
+    backgroundColor: LightColors.background 
+  },
+  heading: { 
+    fontSize: 22, 
+    fontWeight: 'bold', 
+    marginVertical: 12,
+    color: LightColors.textPrimary 
+  },
 
   inputWithIcon: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
+    borderColor: LightColors.border,
     borderRadius: 8,
     paddingHorizontal: 10,
     marginBottom: 10,
+    backgroundColor: LightColors.card
   },
-  inputIcon: { marginRight: 8, color: '#555' },
-  inputInner: { flex: 1, paddingVertical: 10 },
+  inputIcon: { 
+    marginRight: 8, 
+    color: LightColors.textSecondary 
+  },
+  inputInner: { 
+    flex: 1, 
+    paddingVertical: 10,
+    color: LightColors.textPrimary 
+  },
+  textArea: {
+    height: 80,
+    textAlignVertical: 'top',
+    paddingTop: 10
+  },
 
   row: { flexDirection: 'row', flexWrap: 'wrap' },
 
   addBtn: {
-    backgroundColor: '#E8F5E9',
+    backgroundColor: `${LightColors.success}20`,
+    borderWidth: 1,
+    borderColor: LightColors.success,
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 20,
   },
-  addText: { color: '#2E7D32', fontWeight: 'bold' },
+  addText: { 
+    color: LightColors.success, 
+    fontWeight: 'bold' 
+  },
 
   addSmallBtn: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: LightColors.primary,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 8,
     marginLeft: 8,
   },
-  addSmallText: { color: '#fff', fontWeight: 'bold' },
+  addSmallText: { 
+    color: LightColors.card, 
+    fontWeight: 'bold' 
+  },
 
   imageBox: {
     height: 120,
     width: 120,
     borderRadius: 60,
-    borderWidth: 1,
+    borderWidth: 2,
+    borderColor: LightColors.border,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+    backgroundColor: LightColors.card
   },
-  image: { height: 120, width: 120, borderRadius: 60 },
+  image: { 
+    height: 120, 
+    width: 120, 
+    borderRadius: 60 
+  },
+  imagePlaceholderText: {
+    marginTop: 8,
+    color: LightColors.textSecondary,
+    fontSize: 12
+  },
 
   locBtn: {
-    backgroundColor: '#2196F3',
+    backgroundColor: LightColors.secondary,
     padding: 12,
     borderRadius: 8,
     marginVertical: 10,
@@ -536,23 +587,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  locBtnText: {
+    color: LightColors.card,
+    marginLeft: 6,
+    fontWeight: '500'
+  },
+
+  locationText: {
+    textAlign: 'center', 
+    color: LightColors.textSecondary,
+    marginBottom: 20
+  },
 
   langChip: {
     borderWidth: 1,
+    borderColor: LightColors.border,
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
     margin: 4,
+    backgroundColor: LightColors.card
   },
   langChipActive: {
-    backgroundColor: '#4CAF50',
-    borderColor: '#4CAF50',
+    backgroundColor: LightColors.primary,
+    borderColor: LightColors.primary,
   },
-  langText: { color: '#333' },
-  langTextActive: { color: '#fff' },
+  langText: { 
+    color: LightColors.textPrimary 
+  },
+  langTextActive: { 
+    color: LightColors.card,
+    fontWeight: '500'
+  },
 
   saveBtn: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: LightColors.primary,
     padding: 15,
     borderRadius: 8,
     marginVertical: 30,
@@ -560,5 +629,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  saveText: { color: '#fff', fontSize: 16 },
+  saveText: { 
+    color: LightColors.card, 
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 8
+  },
 });

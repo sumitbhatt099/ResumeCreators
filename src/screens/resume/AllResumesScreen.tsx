@@ -5,12 +5,16 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  useColorScheme,
 } from 'react-native';
 
 import ResumeCard from '../../components/ResumeCard';
 import { Resume, getResumes } from '../../storage/resumeStorage';
+import { LightColors, DarkColors } from '../../theme/colors';
 
 const AllResumesScreen = ({ navigation }: any) => {
+  const colorScheme = useColorScheme();
+  const colors = colorScheme === 'dark' ? DarkColors : LightColors;
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -43,16 +47,20 @@ const AllResumesScreen = ({ navigation }: any) => {
 
   if (loading) {
     return (
-      <View style={styles.center}>
-        <Text>Loading resumes...</Text>
+      <View style={[styles.center, { backgroundColor: colors.background }]}>
+        <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
+          Loading resumes...
+        </Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {resumes.length === 0 ? (
-        <Text style={styles.empty}>No resumes created yet</Text>
+        <Text style={[styles.empty, { color: colors.textSecondary }]}>
+          No resumes created yet
+        </Text>
       ) : (
         <FlatList
           data={resumes}
@@ -64,16 +72,21 @@ const AllResumesScreen = ({ navigation }: any) => {
       )}
 
       {/* ➕ Floating Button */}
-  <TouchableOpacity
-  style={styles.fab}
-  onPress={() =>
-    navigation.getParent()?.navigate('CreateResume', {
-      template: 'default', // 👈 default template id
-    })
-  }
->
-
-        <Text style={styles.fabText}>＋</Text>
+      <TouchableOpacity
+        style={[
+          styles.fab,
+          {
+            backgroundColor: colors.primary,
+            shadowColor: colors.textPrimary,
+          },
+        ]}
+        onPress={() =>
+          navigation.getParent()?.navigate('CreateResume', {
+            template: 'default', // 👈 default template id
+          })
+        }
+      >
+        <Text style={[styles.fabText, { color: colors.card }]}>＋</Text>
       </TouchableOpacity>
     </View>
   );
@@ -84,28 +97,33 @@ export default AllResumesScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f2f2f2',
   },
   empty: {
     textAlign: 'center',
     marginTop: 60,
-    color: '#777',
+    fontSize: 16,
+  },
+  loadingText: {
     fontSize: 16,
   },
   fab: {
     position: 'absolute',
     right: 20,
     bottom: 90,
-    backgroundColor: '#4CAF50',
     width: 60,
     height: 60,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 6,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
   },
   fabText: {
-    color: '#fff',
     fontSize: 32,
     lineHeight: 34,
   },
